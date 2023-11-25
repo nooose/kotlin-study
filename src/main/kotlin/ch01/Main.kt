@@ -5,5 +5,5 @@ fun main() {
     val number2 = 10L
     val number3: Long = 10L
     var number4: Long? = null
-    val person = Person()
+    val person = Person(name = "")
 }

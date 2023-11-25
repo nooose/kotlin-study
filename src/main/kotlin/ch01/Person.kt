@@ -1,4 +1,4 @@
 package ch01
 
-class Person {
+class Person(val name: String) {
 }
