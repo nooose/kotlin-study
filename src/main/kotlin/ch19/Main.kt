@@ -19,6 +19,7 @@ fun main() {
     println("$id $name")
     // data 클래스가 아니라면 componentN 을 오버라이드해야함
 
-    val result = listOf(1, 2, 3, 4, 5, 6, 7).map { it.takeIf { it < 5 } }
-    println(result)
+    listOf(1, 2, 3, 4, 5, 6, 7)
+        .map { it.takeIf { it < 5 } }
+        .let { println(it) }
 }
