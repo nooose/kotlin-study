@@ -7,8 +7,10 @@ import jakarta.persistence.GeneratedValue
 import jakarta.persistence.GenerationType
 import jakarta.persistence.Id
 import jakarta.persistence.OneToMany
+import jakarta.persistence.Table
 import java.lang.IllegalArgumentException
 
+@Table(name = "users")
 @Entity
 class User(
     var name: String,

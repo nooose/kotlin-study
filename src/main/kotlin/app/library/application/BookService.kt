@@ -19,7 +19,7 @@ class BookService(
 ) {
 
     @Transactional
-    fun saveUser(request: BookRequest) {
+    fun saveBook(request: BookRequest) {
         val newBook = Book(request.name)
         bookRepository.save(newBook)
     }

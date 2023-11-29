@@ -9,7 +9,6 @@ import java.lang.IllegalArgumentException
 @Entity
 class Book(
     val name: String,
-
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     val id: Long? = null,
 ) {
