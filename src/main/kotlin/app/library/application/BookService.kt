@@ -6,6 +6,7 @@ import app.library.application.dto.book.BookReturnRequest
 import app.library.domain.book.Book
 import app.library.domain.book.BookRepository
 import app.library.domain.user.UserLoanHistoryRepository
+import app.library.domain.user.UserLoanStatus
 import app.library.domain.user.UserRepository
 import app.library.util.fail
 import org.springframework.stereotype.Service
@@ -20,15 +21,15 @@ class BookService(
 
     @Transactional
     fun saveBook(request: BookRequest) {
-        val newBook = Book(request.name)
+        val newBook = Book(request.name, request.type)
         bookRepository.save(newBook)
     }
 
     @Transactional
     fun loanBook(request: BookLoanRequest) {
         val book = bookRepository.findByName(request.bookName) ?: fail()
-        if (userLoanHistoryRepository.findByBookNameAndIsReturn(request.bookName, false) != null) {
-            throw IllegalArgumentException("지작 대출되어 있는 책입니다.")
+        if (userLoanHistoryRepository.findByBookNameAndStatus(request.bookName, UserLoanStatus.LOANED) != null) {
+            throw IllegalArgumentException("진작 대출되어 있는 책입니다.")
         }
 
         val user = userRepository.findByName(request.userName) ?: fail()
