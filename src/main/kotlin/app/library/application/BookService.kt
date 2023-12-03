@@ -7,7 +7,6 @@ import app.library.application.dto.book.BookStatResponse
 import app.library.domain.book.Book
 import app.library.infrastructure.BookQuerydslRepository
 import app.library.domain.book.BookRepository
-import app.library.domain.user.UserLoanHistoryRepository
 import app.library.domain.user.UserLoanStatus
 import app.library.domain.user.UserRepository
 import app.library.infrastructure.UserLoanHistoryQuerydslRepository
@@ -19,7 +18,6 @@ import org.springframework.transaction.annotation.Transactional
 class BookService(
     private val bookRepository: BookRepository,
     private val userRepository: UserRepository,
-    private val userLoanHistoryRepository: UserLoanHistoryRepository,
     private val bookQuerydslRepository: BookQuerydslRepository,
     private val userLoanHistoryQuerydslRepository: UserLoanHistoryQuerydslRepository,
 ) {
