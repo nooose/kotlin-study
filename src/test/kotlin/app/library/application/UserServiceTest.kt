@@ -43,7 +43,6 @@ class UserServiceTest @Autowired constructor(
             UserLoanHistory.fixture(savedUser, "책3", UserLoanStatus.RETURNED),
         ))
 
-
         val results = userService.getUserLoanHistories()
 
         assertThat(results).hasSize(1)

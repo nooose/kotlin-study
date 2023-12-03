@@ -1,0 +1,35 @@
+package app.library.infrastructure
+
+import app.library.application.dto.book.BookStatResponse
+import app.library.domain.book.QBook.book
+import app.library.domain.user.QUserLoanHistory.userLoanHistory
+import app.library.domain.user.UserLoanHistory
+import app.library.domain.user.UserLoanStatus
+import com.querydsl.core.types.Projections
+import com.querydsl.jpa.impl.JPAQueryFactory
+import org.springframework.stereotype.Component
+
+@Component
+class UserLoanHistoryQuerydslRepository(
+    private val queryFactory: JPAQueryFactory,
+) {
+    fun find(bookName: String, status: UserLoanStatus? = null): UserLoanHistory? {
+        return queryFactory.select(userLoanHistory)
+            .from(userLoanHistory)
+            .where(
+                userLoanHistory.bookName.eq(bookName),
+                status?.let { userLoanHistory.status.eq(status) }
+            )
+            .limit(1)
+            .fetchOne()
+    }
+
+    fun count(status: UserLoanStatus): Long {
+        return queryFactory.select(userLoanHistory.id.count())
+            .from(userLoanHistory)
+            .where(
+                userLoanHistory.status.eq(status)
+            )
+            .fetchOne() ?: 0L
+    }
+}

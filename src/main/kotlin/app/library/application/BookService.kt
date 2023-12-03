@@ -5,21 +5,23 @@ import app.library.application.dto.book.BookRequest
 import app.library.application.dto.book.BookReturnRequest
 import app.library.application.dto.book.BookStatResponse
 import app.library.domain.book.Book
+import app.library.infrastructure.BookQuerydslRepository
 import app.library.domain.book.BookRepository
-import app.library.domain.book.BookType
 import app.library.domain.user.UserLoanHistoryRepository
 import app.library.domain.user.UserLoanStatus
 import app.library.domain.user.UserRepository
+import app.library.infrastructure.UserLoanHistoryQuerydslRepository
 import app.library.util.fail
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
-import java.util.Optional
 
 @Service
 class BookService(
     private val bookRepository: BookRepository,
     private val userRepository: UserRepository,
     private val userLoanHistoryRepository: UserLoanHistoryRepository,
+    private val bookQuerydslRepository: BookQuerydslRepository,
+    private val userLoanHistoryQuerydslRepository: UserLoanHistoryQuerydslRepository,
 ) {
 
     @Transactional
@@ -31,7 +33,7 @@ class BookService(
     @Transactional
     fun loanBook(request: BookLoanRequest) {
         val book = bookRepository.findByName(request.bookName) ?: fail()
-        if (userLoanHistoryRepository.findByBookNameAndStatus(request.bookName, UserLoanStatus.LOANED) != null) {
+        if (userLoanHistoryQuerydslRepository.find(request.bookName, UserLoanStatus.LOANED) != null) {
             throw IllegalArgumentException("진작 대출되어 있는 책입니다.")
         }
 
@@ -47,11 +49,11 @@ class BookService(
 
     @Transactional(readOnly = true)
     fun countLoanedBook(): Int {
-        return userLoanHistoryRepository.countByStatus(UserLoanStatus.LOANED).toInt()
+        return userLoanHistoryQuerydslRepository.count(UserLoanStatus.LOANED).toInt()
     }
 
     @Transactional(readOnly = true)
     fun getBookStatistics(): List<BookStatResponse> {
-        return bookRepository.getStatus()
+        return bookQuerydslRepository.getStatus()
     }
 }
