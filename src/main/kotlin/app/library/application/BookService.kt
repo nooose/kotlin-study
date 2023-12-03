@@ -3,14 +3,17 @@ package app.library.application
 import app.library.application.dto.book.BookLoanRequest
 import app.library.application.dto.book.BookRequest
 import app.library.application.dto.book.BookReturnRequest
+import app.library.application.dto.book.BookStatResponse
 import app.library.domain.book.Book
 import app.library.domain.book.BookRepository
+import app.library.domain.book.BookType
 import app.library.domain.user.UserLoanHistoryRepository
 import app.library.domain.user.UserLoanStatus
 import app.library.domain.user.UserRepository
 import app.library.util.fail
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
+import java.util.Optional
 
 @Service
 class BookService(
@@ -40,5 +43,15 @@ class BookService(
     fun returnBook(request: BookReturnRequest) {
         val user = userRepository.findByName(request.userName) ?: fail()
         user.returnBook(request.bookName)
+    }
+
+    @Transactional(readOnly = true)
+    fun countLoanedBook(): Int {
+        return userLoanHistoryRepository.countByStatus(UserLoanStatus.LOANED).toInt()
+    }
+
+    @Transactional(readOnly = true)
+    fun getBookStatistics(): List<BookStatResponse> {
+        return bookRepository.getStatus()
     }
 }
