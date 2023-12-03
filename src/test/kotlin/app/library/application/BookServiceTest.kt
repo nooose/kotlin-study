@@ -5,10 +5,12 @@ import app.library.domain.book.BookRepository
 import app.library.domain.book.BookType
 import org.assertj.core.api.AssertionsForInterfaceTypes.assertThat
 import org.junit.jupiter.api.AfterEach
+import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 
+@DisplayName("BookService 테스트")
 @SpringBootTest
 class BookServiceTest @Autowired constructor(
     private val bookService: BookService,
@@ -17,6 +19,7 @@ class BookServiceTest @Autowired constructor(
 
     @AfterEach
     fun clean() {
+        println("CLEAN")
         bookRepository.deleteAll()
     }
 

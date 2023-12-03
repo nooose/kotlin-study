@@ -1,8 +1,6 @@
 package app.library.application
 
-import app.library.application.dto.user.UserCreateRequest
-import app.library.application.dto.user.UserResponse
-import app.library.application.dto.user.UserUpdateRequest
+import app.library.application.dto.user.*
 import app.library.domain.user.User
 import app.library.domain.user.UserRepository
 import app.library.util.fail
@@ -36,5 +34,11 @@ class UserService(
     fun deleteUser(name: String) {
         val user = userRepository.findByName(name) ?: fail()
         userRepository.delete(user)
+    }
+
+    @Transactional(readOnly = true)
+    fun getUserLoanHistories(): List<UserLoanHistoryResponse> {
+        return userRepository.findAllWithHistories()
+            .map(UserLoanHistoryResponse::from)
     }
 }

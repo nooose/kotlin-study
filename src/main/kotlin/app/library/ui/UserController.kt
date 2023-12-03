@@ -1,11 +1,8 @@
 package app.library.ui
 
-import app.library.application.BookService
 import app.library.application.UserService
-import app.library.application.dto.book.BookLoanRequest
-import app.library.application.dto.book.BookRequest
-import app.library.application.dto.book.BookReturnRequest
 import app.library.application.dto.user.UserCreateRequest
+import app.library.application.dto.user.UserLoanHistoryResponse
 import app.library.application.dto.user.UserResponse
 import app.library.application.dto.user.UserUpdateRequest
 import org.springframework.web.bind.annotation.DeleteMapping
@@ -39,5 +36,10 @@ class UserController(
     @DeleteMapping("/users")
     fun deleteUser(@RequestParam name: String) {
         userService.deleteUser(name)
+    }
+
+    @GetMapping("/users/loan")
+    fun getUserLoanHistories(): List<UserLoanHistoryResponse> {
+        return userService.getUserLoanHistories()
     }
 }
