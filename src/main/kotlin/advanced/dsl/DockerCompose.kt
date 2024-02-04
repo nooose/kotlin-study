@@ -3,27 +3,6 @@ package advanced.dsl
 import kotlin.properties.ReadWriteProperty
 import kotlin.reflect.KProperty
 
-fun main() {
-
-    val yml = dockerCompose {
-        version { 3 }
-        service(name = "db") {
-            image { "mysql" }
-            env("USER" - "noose")
-            env("PASSWORD" - "1234")
-            port(3306, 3306)
-        }
-    }
-
-    println(yml.render("  "))
-}
-
-fun dockerCompose(init: DockerCompose.() -> Unit): DockerCompose {
-    val dockerCompose = DockerCompose()
-    dockerCompose.init()
-    return dockerCompose
-}
-
 @MyYamlDsl
 class DockerCompose {
     private var version: Int by onceNotNull()
@@ -31,6 +10,12 @@ class DockerCompose {
 
     fun version(init: () -> Int) {
         version = init()
+    }
+
+    fun service(name: String, init: Service.() -> Unit) {
+        val service = Service(name)
+        service.init()
+        services.add(service)
     }
 
     fun render(indent: String): String {
@@ -42,67 +27,7 @@ class DockerCompose {
         }.addIndent(indent, 1))
         return builder.toString()
     }
-
-    fun service(name: String, init: Service.() -> Unit) {
-        val service = Service(name)
-        service.init()
-        services.add(service)
-    }
 }
-
-@MyYamlDsl
-class Service(val name: String) {
-    private var image: String by onceNotNull()
-    private val environments = mutableListOf<Environment>()
-    private val portRules = mutableListOf<PortRule>()
-
-    fun image(init: () -> String) {
-        image = init()
-    }
-
-    fun render(indent: String): String {
-        val builder = StringBuilder()
-        builder.appendNew("$name:")
-        builder.appendNew("image: $image", indent, 1)
-        builder.appendNew("environment:".addIndent(indent, 1))
-        environments.joinToString("\n") { "- ${it.key}: ${it.key}" }
-            .addIndent(indent, 2)
-            .also { builder.appendNew(it) }
-        builder.appendNew("port:")
-        portRules.joinToString("\n") { "- \"${it.host}:${it.container}\"" }
-            .addIndent(indent, 1)
-            .also { builder.appendNew(it) }
-        return builder.toString()
-    }
-
-    fun env(environment: Environment) {
-        this.environments.add(environment)
-    }
-
-    fun port(host: Int, container: Int) {
-        this.portRules.add(PortRule(host = host, container = container))
-    }
-}
-
-data class PortRule(
-    val host: Int,
-    val container: Int,
-)
-
-
-data class Environment(
-    val key: String,
-    val value: String,
-)
-
-
-operator fun String.minus(other: String): Environment {
-    return Environment(
-        key = this,
-        value = other,
-    )
-}
-
 
 fun <T> onceNotNull() = object : ReadWriteProperty<Any?, T> {
     private var value: T? = null
@@ -132,6 +57,3 @@ fun String.addIndent(indent: String, times: Int = 0): String {
     return this.split("\n")
         .joinToString("\n") { "$allIndent$it" }
 }
-
-@DslMarker
-annotation class MyYamlDsl
