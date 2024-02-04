@@ -53,7 +53,7 @@ fun StringBuilder.appendNew(str: String, indent: String = "", times: Int = 0) {
 }
 
 fun String.addIndent(indent: String, times: Int = 0): String {
-    val allIndent = (1..times).joinToString("") { indent }
+    val allIndent = indent.repeat(times)
     return this.split("\n")
         .joinToString("\n") { "$allIndent$it" }
 }
