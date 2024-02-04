@@ -45,4 +45,3 @@ val Int.day: Days
 operator fun LocalDate.plus(days: Days): LocalDate {
     return this.plusDays(days.day)
 }
-
