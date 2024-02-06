@@ -1,4 +1,4 @@
-package advanced.reflect
+package advanced.reflection
 
 import kotlin.reflect.KClass
 
