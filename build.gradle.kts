@@ -32,6 +32,7 @@ dependencies {
     kapt("org.springframework.boot:spring-boot-configuration-processor")
 
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core")
     implementation("org.jetbrains.kotlin:kotlin-reflect")
     implementation("org.reflections:reflections:0.10.2")
     runtimeOnly("com.h2database:h2")
