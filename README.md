@@ -31,3 +31,7 @@
 ### Main
 - 보통 UI 컴포넌트를 조작하기 위한 디스패처
 - 안드로이드 같은 UI가 필요한 프로젝트에서 사용
+
+## Suspend
+- 코루틴이 중지 되었다가 재개 **될 수 있는** 지점
+- 코루틴 suspend 함수 동작원리는 Continuation Passing Style (CPS) 원리에 따라 동작된다.
